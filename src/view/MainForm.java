@@ -1,5 +1,13 @@
 package view;
 
+import java.io.File;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 public class MainForm extends javax.swing.JFrame {
 
     public MainForm() {
@@ -29,12 +37,12 @@ public class MainForm extends javax.swing.JFrame {
         jCheckBox1 = new javax.swing.JCheckBox();
         jRadioButton1 = new javax.swing.JRadioButton();
         jRadioButton2 = new javax.swing.JRadioButton();
-        jButton3 = new javax.swing.JButton();
+        btnMentes = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        mnuMentes = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jRadioButtonMenuItem1 = new javax.swing.JRadioButtonMenuItem();
@@ -124,7 +132,12 @@ public class MainForm extends javax.swing.JFrame {
         jRadioButton2.setSelected(true);
         jRadioButton2.setText("lapok összértéke");
 
-        jButton3.setText("Mentés");
+        btnMentes.setText("Mentés");
+        btnMentes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMentesActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Kilépés");
 
@@ -137,7 +150,7 @@ public class MainForm extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jCheckBox1)
                     .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3)
+                    .addComponent(btnMentes)
                     .addComponent(jRadioButton2)
                     .addComponent(jRadioButton1))
                 .addContainerGap())
@@ -150,7 +163,7 @@ public class MainForm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jRadioButton2)
                 .addGap(18, 18, 18)
-                .addComponent(jButton3)
+                .addComponent(btnMentes)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jCheckBox1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -162,8 +175,13 @@ public class MainForm extends javax.swing.JFrame {
 
         jMenu1.setText("File");
 
-        jMenuItem1.setText("Mentés");
-        jMenu1.add(jMenuItem1);
+        mnuMentes.setText("Mentés");
+        mnuMentes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuMentesActionPerformed(evt);
+            }
+        });
+        jMenu1.add(mnuMentes);
 
         jMenuItem2.setText("Kilépés");
         jMenu1.add(jMenuItem2);
@@ -219,6 +237,41 @@ public class MainForm extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnMentesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMentesActionPerformed
+        mentes();
+    }//GEN-LAST:event_btnMentesActionPerformed
+
+    private void mnuMentesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMentesActionPerformed
+         mentes();
+    }//GEN-LAST:event_mnuMentesActionPerformed
+
+    private void mentes() {
+        JFileChooser jfc = new JFileChooser(new File("."));
+        jfc.setDialogTitle("Megnyitás...");
+        
+        FileNameExtensionFilter filterKepek = new FileNameExtensionFilter("képek (*.jpg, *.gif)", "jpg", "gif");
+        FileNameExtensionFilter filterTxt = new FileNameExtensionFilter("csak szöveg (*.txt)", "txt");
+        
+        jfc.addChoosableFileFilter(filterKepek);
+        jfc.addChoosableFileFilter(filterTxt);
+        
+        jfc.setFileFilter(filterTxt);
+        
+        int gomb = jfc.showOpenDialog(jPanel1);
+        if(gomb == JFileChooser.APPROVE_OPTION){
+            String fajlNev = "Fájl neve: " + jfc.getSelectedFile().getName();
+            String eleres = "Elérése: " + jfc.getSelectedFile().getPath();
+            String uzenet = fajlNev + "\n" + eleres;
+            felugro(uzenet);
+        }
+    }
+    
+    private int felugro(String uzenet) {
+        Icon icon = new ImageIcon(this.getClass().getResource("res/ikon.jpg"));
+            //JOptionPane.showMessageDialog(rootPane, "Fájlnév", "Kérdés", JOptionPane.INFORMATION_MESSAGE, icon); 
+            return JOptionPane.showConfirmDialog(rootPane, uzenet, "Kérdés", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, icon);
+    }
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -251,11 +304,11 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnMentes;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
@@ -266,7 +319,6 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -275,5 +327,10 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem1;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem2;
+    private javax.swing.JMenuItem mnuMentes;
     // End of variables declaration//GEN-END:variables
+
+    
+
+    
 }

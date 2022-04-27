@@ -10,8 +10,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class MainForm extends javax.swing.JFrame {
 
+    private boolean voltValtozas;
+    
     public MainForm() {
         initComponents();
+        voltValtozas = false;
     }
 
     /**
@@ -35,22 +38,27 @@ public class MainForm extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jCheckBox1 = new javax.swing.JCheckBox();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
+        rdbLapokFelsorol = new javax.swing.JRadioButton();
+        rdbLapokOsszERtek = new javax.swing.JRadioButton();
         btnMentes = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         mnuMentes = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        mnuKilep = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        jRadioButtonMenuItem1 = new javax.swing.JRadioButtonMenuItem();
-        jRadioButtonMenuItem2 = new javax.swing.JRadioButtonMenuItem();
+        rdbKockaztat = new javax.swing.JRadioButtonMenuItem();
+        rdbNemKockaztat = new javax.swing.JRadioButtonMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("BlackJack");
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Ellenfél"));
 
@@ -125,12 +133,22 @@ public class MainForm extends javax.swing.JFrame {
         jCheckBox1.setSelected(true);
         jCheckBox1.setText("Kilépésnél ment");
 
-        buttonGroup2.add(jRadioButton1);
-        jRadioButton1.setText("lapokat felsorol");
+        buttonGroup2.add(rdbLapokFelsorol);
+        rdbLapokFelsorol.setText("lapokat felsorol");
+        rdbLapokFelsorol.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                valtozas(evt);
+            }
+        });
 
-        buttonGroup2.add(jRadioButton2);
-        jRadioButton2.setSelected(true);
-        jRadioButton2.setText("lapok összértéke");
+        buttonGroup2.add(rdbLapokOsszERtek);
+        rdbLapokOsszERtek.setSelected(true);
+        rdbLapokOsszERtek.setText("lapok összértéke");
+        rdbLapokOsszERtek.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                valtozas(evt);
+            }
+        });
 
         btnMentes.setText("Mentés");
         btnMentes.addActionListener(new java.awt.event.ActionListener() {
@@ -151,17 +169,17 @@ public class MainForm extends javax.swing.JFrame {
                     .addComponent(jCheckBox1)
                     .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnMentes)
-                    .addComponent(jRadioButton2)
-                    .addComponent(jRadioButton1))
+                    .addComponent(rdbLapokOsszERtek)
+                    .addComponent(rdbLapokFelsorol))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(24, 24, 24)
-                .addComponent(jRadioButton1)
+                .addComponent(rdbLapokFelsorol)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jRadioButton2)
+                .addComponent(rdbLapokOsszERtek)
                 .addGap(18, 18, 18)
                 .addComponent(btnMentes)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -183,21 +201,36 @@ public class MainForm extends javax.swing.JFrame {
         });
         jMenu1.add(mnuMentes);
 
-        jMenuItem2.setText("Kilépés");
-        jMenu1.add(jMenuItem2);
+        mnuKilep.setText("Kilépés");
+        mnuKilep.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuKilepActionPerformed(evt);
+            }
+        });
+        jMenu1.add(mnuKilep);
 
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Stratégia");
 
-        buttonGroup1.add(jRadioButtonMenuItem1);
-        jRadioButtonMenuItem1.setText("Kockázat");
-        jMenu2.add(jRadioButtonMenuItem1);
+        buttonGroup1.add(rdbKockaztat);
+        rdbKockaztat.setText("Kockázat");
+        rdbKockaztat.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                valtozas(evt);
+            }
+        });
+        jMenu2.add(rdbKockaztat);
 
-        buttonGroup1.add(jRadioButtonMenuItem2);
-        jRadioButtonMenuItem2.setSelected(true);
-        jRadioButtonMenuItem2.setText("Nem kockáztat");
-        jMenu2.add(jRadioButtonMenuItem2);
+        buttonGroup1.add(rdbNemKockaztat);
+        rdbNemKockaztat.setSelected(true);
+        rdbNemKockaztat.setText("Nem kockáztat");
+        rdbNemKockaztat.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                valtozas(evt);
+            }
+        });
+        jMenu2.add(rdbNemKockaztat);
 
         jMenuBar1.add(jMenu2);
 
@@ -245,6 +278,29 @@ public class MainForm extends javax.swing.JFrame {
          mentes();
     }//GEN-LAST:event_mnuMentesActionPerformed
 
+    private void mnuKilepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuKilepActionPerformed
+        kilepes();
+    }//GEN-LAST:event_mnuKilepActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        kilepes();
+    }//GEN-LAST:event_formWindowClosing
+
+    /* ButtonGroup1 és ButtonGroup2 gombokhoz */
+    private void valtozas(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_valtozas
+        voltValtozas = true;
+    }//GEN-LAST:event_valtozas
+
+    private void kilepes(){
+        if (voltValtozas) {
+            if (felugro("Biztos kilép?") == JOptionPane.OK_OPTION) {                
+                System.exit(0);
+            }
+        } else {
+            System.exit(0);
+        }
+    }
+    
     private void mentes() {
         JFileChooser jfc = new JFileChooser(new File("."));
         jfc.setDialogTitle("Megnyitás...");
@@ -319,15 +375,15 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem1;
-    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem2;
+    private javax.swing.JMenuItem mnuKilep;
     private javax.swing.JMenuItem mnuMentes;
+    private javax.swing.JRadioButtonMenuItem rdbKockaztat;
+    private javax.swing.JRadioButton rdbLapokFelsorol;
+    private javax.swing.JRadioButton rdbLapokOsszERtek;
+    private javax.swing.JRadioButtonMenuItem rdbNemKockaztat;
     // End of variables declaration//GEN-END:variables
 
     
